@@ -1,5 +1,4 @@
 import { Component, type ReactNode } from 'react'
-import { ErrorPage } from './ErrorPage'
 
 interface Props {
   children: ReactNode
@@ -37,11 +36,28 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <ErrorPage
-          error={this.state.error}
-          onRetry={this.handleRetry}
-          onGoHome={this.handleGoHome}
-        />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Bir Hata Oluştu</h1>
+            <p className="text-gray-600 mb-6">
+              {this.state.error?.message || 'Bilinmeyen bir hata oluştu.'}
+            </p>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={this.handleRetry}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              >
+                Tekrar Dene
+              </button>
+              <button
+                onClick={this.handleGoHome}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+              >
+                Ana Sayfa
+              </button>
+            </div>
+          </div>
+        </div>
       )
     }
 
