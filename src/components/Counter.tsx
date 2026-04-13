@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import type { ReactNode } from 'react'
 
 interface Activity {
   type: 'increase' | 'decrease'
@@ -6,39 +6,14 @@ interface Activity {
 }
 
 interface CounterProps {
-  initialCount?: number
+  count: number
+  activities: Activity[]
+  onIncrease: () => void
+  onDecrease: () => void
+  onReset: () => void
 }
 
-export function Counter({ initialCount = 0 }: CounterProps) {
-  const [count, setCount] = useState(initialCount)
-  const [activities, setActivities] = useState<Activity[]>([])
-
-  const getCurrentTime = useCallback(() => {
-    const now = new Date()
-    return now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
-  }, [])
-
-  const handleIncrease = useCallback(() => {
-    setCount((prev) => prev + 1)
-    setActivities((prev) => [
-      { type: 'increase', time: getCurrentTime() },
-      ...prev.slice(0, 1),
-    ])
-  }, [getCurrentTime])
-
-  const handleDecrease = useCallback(() => {
-    setCount((prev) => prev - 1)
-    setActivities((prev) => [
-      { type: 'decrease', time: getCurrentTime() },
-      ...prev.slice(0, 1),
-    ])
-  }, [getCurrentTime])
-
-  const handleReset = useCallback(() => {
-    setCount(0)
-    setActivities([])
-  }, [])
-
+export function Counter({ count, activities, onIncrease, onDecrease, onReset }: CounterProps): ReactNode {
   return (
     <div className="relative w-full max-w-md flex flex-col items-center">
       {/* Contextual Decorative Gradient */}
@@ -50,7 +25,7 @@ export function Counter({ initialCount = 0 }: CounterProps) {
         <span className="text-on-tertiary-container/30 font-label text-[0.75rem] font-medium uppercase tracking-[0.2em] mb-4">
           Mevcut Sayaç
         </span>
-        <div className="text-[8rem] md:text-[12rem] font-black leading-none tracking-[-0.04em] text-on-surface text-shadow-monolith">
+        <div className="text-[3.5rem] font-extrabold leading-none tracking-[-0.04em] text-on-surface text-shadow-monolith">
           {count}
         </div>
         <div className="mt-4 flex items-center gap-2">
@@ -65,7 +40,7 @@ export function Counter({ initialCount = 0 }: CounterProps) {
       <div className="w-full space-y-6">
         {/* Artır Button (Primary) */}
         <button
-          onClick={handleIncrease}
+          onClick={onIncrease}
           className="group relative w-full h-24 bg-gradient-to-br from-primary-container to-primary rounded-xl overflow-hidden active:scale-[0.96] transition-all duration-200 flex items-center justify-center shadow-[0_20px_40px_rgba(16,185,129,0.15)] cursor-pointer"
           aria-label="Artır"
         >
@@ -86,7 +61,7 @@ export function Counter({ initialCount = 0 }: CounterProps) {
         <div className="grid grid-cols-2 gap-4">
           {/* Azalt Button (Secondary) */}
           <button
-            onClick={handleDecrease}
+            onClick={onDecrease}
             className="h-20 bg-secondary-container rounded-lg active:scale-[0.96] transition-all duration-200 flex items-center justify-center hover:brightness-110 cursor-pointer"
             aria-label="Azalt"
           >
@@ -100,7 +75,7 @@ export function Counter({ initialCount = 0 }: CounterProps) {
 
           {/* Sıfırla Button (Tertiary) */}
           <button
-            onClick={handleReset}
+            onClick={onReset}
             className="h-20 bg-surface-container-highest rounded-lg active:scale-[0.96] transition-all duration-200 flex items-center justify-center hover:bg-surface-container-high border border-outline-variant/10 cursor-pointer"
             aria-label="Sıfırla"
           >
@@ -124,10 +99,10 @@ export function Counter({ initialCount = 0 }: CounterProps) {
             <span className="text-[0.7rem] text-tertiary-container">Bugün, {activities[0]?.time}</span>
           </div>
           <div className="space-y-4">
-            {activities.slice(0, 2).map((activity, index) => (
+            {activities.slice(0, 10).map((activity) => (
               <div
-                key={index}
-                className={`flex items-center justify-between py-2 ${index > 0 ? 'border-t border-outline-variant/5' : ''}`}
+                key={`${activity.type}-${activity.time}`}
+                className={`flex items-center justify-between py-2 border-t border-outline-variant/5 first:border-0`}
               >
                 <div className="flex items-center gap-3">
                   <div

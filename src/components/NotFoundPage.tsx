@@ -2,30 +2,34 @@ import type { ReactNode } from 'react'
 
 interface NotFoundPageProps {
   onGoHome?: () => void
+  onHistory?: () => void
+  onSettings?: () => void
 }
 
-export function NotFoundPage({ onGoHome }: NotFoundPageProps): ReactNode {
+export function NotFoundPage({ onGoHome, onHistory, onSettings }: NotFoundPageProps): ReactNode {
   const handleGoHome = () => {
     if (onGoHome) {
       onGoHome()
-    } else {
-      window.location.href = '/'
     }
   }
 
   const handleHistoryClick = () => {
-    window.location.href = '/history'
+    if (onHistory) {
+      onHistory()
+    }
   }
 
   const handleSettingsClick = () => {
-    window.location.href = '/settings'
+    if (onSettings) {
+      onSettings()
+    }
   }
 
   return (
     <div className="min-h-screen bg-surface text-on-surface overflow-hidden">
       {/* Header */}
       <header className="fixed top-0 w-full flex justify-between items-center px-6 h-16 z-50 bg-surface">
-        <div className="text-xl font-black text-on-surface tracking-[0.05em] uppercase font-extrabold tracking-tighter">
+        <div className="text-xl font-black text-on-surface tracking-[0.05em] uppercase">
           SAYAC
         </div>
         <div className="flex gap-4">
@@ -97,33 +101,39 @@ export function NotFoundPage({ onGoHome }: NotFoundPageProps): ReactNode {
 
       {/* Bottom Navigation */}
       <footer className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-8 pt-4 bg-surface/80 backdrop-blur-xl rounded-t-[3rem] shadow-[0px_-20px_40px_rgba(0,0,0,0.4)]">
-        <div
+        <button
+          type="button"
           onClick={handleGoHome}
-          className="flex flex-col items-center justify-center text-tertiary-container opacity-60 hover:opacity-100 transition-opacity cursor-pointer group"
+          aria-label="Sayaç"
+          className="flex flex-col items-center justify-center text-tertiary-container opacity-60 hover:opacity-100 transition-opacity cursor-pointer group bg-transparent border-0 p-0"
         >
           <span className="material-symbols-outlined group-active:scale-90 transition-transform">
             counter_1
           </span>
           <span className="text-[0.75rem] font-medium uppercase tracking-widest mt-1">Sayaç</span>
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
           onClick={handleHistoryClick}
-          className="flex flex-col items-center justify-center text-tertiary-container opacity-60 hover:opacity-100 transition-opacity cursor-pointer group"
+          aria-label="Geçmiş"
+          className="flex flex-col items-center justify-center text-tertiary-container opacity-60 hover:opacity-100 transition-opacity cursor-pointer group bg-transparent border-0 p-0"
         >
           <span className="material-symbols-outlined group-active:scale-90 transition-transform">
             history
           </span>
           <span className="text-[0.75rem] font-medium uppercase tracking-widest mt-1">Geçmiş</span>
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
           onClick={handleSettingsClick}
-          className="flex flex-col items-center justify-center text-tertiary-container opacity-60 hover:opacity-100 transition-opacity cursor-pointer group"
+          aria-label="Ayarlar"
+          className="flex flex-col items-center justify-center text-tertiary-container opacity-60 hover:opacity-100 transition-opacity cursor-pointer group bg-transparent border-0 p-0"
         >
           <span className="material-symbols-outlined group-active:scale-90 transition-transform">
             settings
           </span>
           <span className="text-[0.75rem] font-medium uppercase tracking-widest mt-1">Ayarlar</span>
-        </div>
+        </button>
       </footer>
     </div>
   )
